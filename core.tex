@@ -1,0 +1,44 @@
+\documentclass{article}
+
+\input{packages.tex}
+\input{custom.tex}
+
+\newtoggle{watch}
+
+\input{config.tex}
+
+\iftoggle{watch}{
+    \geometry{
+        papersize={103.78368mm,129.7296mm},
+        right=8mm,
+        left=8mm,
+        top=8mm,
+        bottom=8mm,
+    }
+}{
+    \geometry{
+        papersize={21cm,29.7cm},
+        right=25mm,
+        left=30mm,
+        top=20mm,
+        bottom=20mm,
+    }
+}
+
+\begin{document}
+    \input{structs.tex}
+
+    \iftoggle{watch}{
+        \large
+        \pagenumbering{gobble}
+    }
+
+    \setcounter{section}{\startTicket - 1}
+
+    \part{Билеты}
+        \foreach \ticketNumber in {\startTicket,...,\endTicket}
+        {
+            \input{src/tickets/\ticketNumber.tex}
+        }
+
+\end{document}
