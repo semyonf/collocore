@@ -7,7 +7,7 @@
 
 \input{config.tex}
 
-\iftoggle{watch}{
+\ifthenelse{\equal{\targetDevice}{watch}}{
     \geometry{
         papersize={104mm,130mm},
         right=5mm,
@@ -15,24 +15,35 @@
         top=5mm,
         bottom=5mm,
     }
-}{
+}{}
+
+\ifthenelse{\equal{\targetDevice}{print}}{
     \geometry{
         papersize={21cm,29.7cm},
-        right=25mm,
-        left=30mm,
-        top=20mm,
-        bottom=20mm,
+        right=10mm,
+        left=10mm,
+        top=15mm,
+        bottom=15mm,
     }
-}
+}{}
+
+\ifthenelse{\equal{\targetDevice}{phone}}{
+    \geometry{
+        papersize={70mm,110mm},
+        right=5mm,
+        left=5mm,
+        top=5mm,
+        bottom=5mm,
+    }
+}{}
 
 \begin{document}
     \sloppy
     \input{structs.tex}
 
-    \iftoggle{watch}{
+    \ifthenelse{\equal{\targetDevice}{watch}}{
         \large
-        \pagenumbering{gobble}
-    }
+    }{}
 
     \setcounter{section}{\startTicket - 1}
 
