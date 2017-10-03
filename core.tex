@@ -27,6 +27,16 @@
     }
 }{}
 
+\ifthenelse{\equal{\targetDevice}{debug}}{
+    \geometry{
+        papersize={21cm,29.7cm},
+        right=35mm,
+        left=5mm,
+        top=15mm,
+        bottom=15mm,
+    }
+}{}
+
 \ifthenelse{\equal{\targetDevice}{phone}}{
     \geometry{
         papersize={70mm,110mm},
