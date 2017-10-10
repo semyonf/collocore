@@ -58,6 +58,8 @@
         \foreach \ticketNumber in {\startTicket,...,\endTicket}
         {
             \input{src/tickets/\ticketNumber.tex}
+            \iftoggle{paginate}{
+                \newpage
+            }
         }
-
 \end{document}
