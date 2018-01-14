@@ -24,6 +24,16 @@
     }
 }{}
 
+\ifthenelse{\equal{\targetDevice}{microprint}}{
+    \geometry{
+        papersize={21cm,29.7cm},
+        right=5mm,
+        left=5mm,
+        top=5mm,
+        bottom=5mm,
+    }
+}{}
+
 \ifthenelse{\equal{\targetDevice}{debug}}{
     \geometry{
         papersize={21cm,29.7cm},
@@ -50,6 +60,11 @@
 
     \ifthenelse{\equal{\targetDevice}{watch}}{
         \large
+    }{}
+
+    \ifthenelse{\equal{\targetDevice}{microprint}}{
+        \Large
+        \boldmath
     }{}
 
     \setcounter{section}{\startTicket - 1}

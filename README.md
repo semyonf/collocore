@@ -19,7 +19,7 @@
 \def \startTicket{1} % С какого билета начать
 \def \endTicket{8}   % Каким билетом закончить
 
-\setTargetDevice{print} % Целевой девайс [watch|print|phone|debug]
+\setTargetDevice{print} % Целевой девайс [watch|print|phone|debug|microprint]
 
 \toggletrue{paginate} % Начинать каждый билет с новой страницы
 %=================================================================
