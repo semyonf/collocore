@@ -17,5 +17,5 @@ rm config.tex.bak
 
 for (( i=1; i <= $amount_of_tickets; i++ ))
 do
-    touch "src/tickets/$i.tex"
+    echo '\section{Тема}' > "src/tickets/$i.tex"
 done
