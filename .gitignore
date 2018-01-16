@@ -1,10 +1,1 @@
-*
-
-!.gitignore
-!core.tex
-!custom.tex
-!packages.tex
-!structs.tex
-!README.md
-!changelog.md
-!LICENSE
+.DS_Store
