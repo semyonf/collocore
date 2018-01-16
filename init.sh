@@ -2,10 +2,6 @@
 
 tickets_file=$1
 
-if [[ $tickets_file == '' ]]; then
-    tickets_file='tickets.txt'
-fi
-
 if [[ ! -f $tickets_file ]]; then
     echo 'Файл с билетами не найден'
     exit 1
