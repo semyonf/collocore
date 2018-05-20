@@ -1,3 +1,6 @@
+[![GitHub issues](https://img.shields.io/github/issues/taxnuke/collocore.svg)](https://github.com/taxnuke/collocore/issues)
+[![GitHub license](https://img.shields.io/github/license/taxnuke/collocore.svg)](https://github.com/taxnuke/collocore/blob/master/LICENSE)
+
 ## Ядро для вёрстки билетов к экзаменам в LaTeX
 
 > Обратная совместимость не гарантируется, поэтому если какой-то проект использует более старую версию, то лучше её и использовать
