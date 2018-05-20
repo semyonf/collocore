@@ -6,7 +6,8 @@ const
   TRELLO_TOKEN = argFinder('--token'),
   TRELLO_KEY = argFinder('--key'),
   TRELLO_LIST = argFinder('--list'),
-  FILE_WITH_TICKETS = process.argv[2];
+  ENUMERATE_TICKETS = argFinder('-n'),
+  FILE_WITH_TICKETS = argFinder('--file');
 
 const
   https = require('https'),
@@ -15,20 +16,29 @@ const
 
 let
   tickets = [],
-  currentTicketNumber = 1;
+  currentTicketNumber = 0;
+
+if (!FILE_WITH_TICKETS) {
+  console.error('Нужен .txt-файл с билетами');
+  process.exit(1);
+}
 
 readLine.createInterface({input: fs.createReadStream(FILE_WITH_TICKETS)})
-  .on('line', (ticket) => tickets.push(ticket))
+  .on('line', (subject) => {
+    if (!subject.startsWith('#')) {
+      tickets.push(subject)
+    }
+  })
   .on('close', () => {
     postNextTicketToTrello();
   });
 
 function postNextTicketToTrello() {
   const nextTicket = tickets.shift();
+  ++currentTicketNumber;
 
   if (nextTicket) {
     addNewTicketToTrello(nextTicket, postNextTicketToTrello);
-    ++currentTicketNumber;
   } else {
     console.log('Все билеты добавлены в Trello!');
   }
@@ -40,7 +50,7 @@ function postNextTicketToTrello() {
  * @param {function} callback Коллбэк, вызываемый после добавления билета
  */
 function addNewTicketToTrello(subject, callback) {
-  const cardName = `${currentTicketNumber}. ` + subject;
+  const cardName = ENUMERATE_TICKETS ? `${currentTicketNumber}. ` + subject : subject;
 
   addCard(
     cardName,
@@ -62,6 +72,9 @@ function addNewTicketToTrello(subject, callback) {
  */
 function addCard(name, desc, idList, idLabels, pos, callback) {
   sendRequest('/cards', { name, desc, idList, idLabels, pos }, callback);
+  // Для отладки
+  // console.debug(name);
+  // callback();
 }
 
 /**
@@ -85,9 +98,22 @@ function sendRequest(route, data, callback) {
       res.setEncoding('utf8');
       res.on('data', (chunk) => {
         if (res.statusCode !== 200) {
-          console.log('Status: ' + res.statusCode);
-          console.log('Body: ' + chunk);
-          console.log('Data: ' + JSON.stringify(data));
+          if (res.statusCode === 401 || res.statusCode === 400) {
+            switch (chunk) {
+              case 'invalid key':
+                console.error('Неверный API-ключ'); break;
+              case 'invalid value for idList':
+                console.error('Неверный ID списка'); break;
+              case 'invalid token':
+                console.error('Неверный токен'); break;
+              default:
+                console.error(chunk); break;
+            }
+          } else {
+            console.log('Status: ' + res.statusCode);
+            console.log('Body: ' + chunk);
+            console.log('Data: ' + JSON.stringify(data));
+          }
 
           process.exit(1);
         } else {
@@ -110,9 +136,15 @@ function sendRequest(route, data, callback) {
  * @param {string} key Искомый аргумент
  */
 function argFinder(key) {
-  const keyPosition = process.argv.findIndex((argument) => {
-    return argument === key;
-  });
+  if (key.startsWith('--')) {
+    const keyPosition = process.argv.findIndex((argument) => {
+      return argument === key;
+    });
 
-  return process.argv[keyPosition + 1];
+    if (keyPosition !== -1) {
+      return process.argv[keyPosition + 1];
+    }
+  } else {
+    return process.argv.includes(key);
+  }
 }
